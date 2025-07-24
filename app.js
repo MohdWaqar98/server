@@ -21,6 +21,12 @@ app.use(cookieParser());
 // Define the routes
 app.use('/api/v1/auth', userRouter);
 app.use('/api/v1/contact',msgRouter);
+app.get('/api/v1/deployment-status', (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: "Deployment successful"
+    });
+});
 
 app.get('/',(req,res)=>{
     return res.status(200).json({
