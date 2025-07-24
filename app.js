@@ -39,8 +39,8 @@ dbConnect().then(()=>{
     app.on("Error", (err) => {
         console.error("Error in database connection:", err);
     });
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+    app.listen(PORT || 3000, () => {
+        console.log(`Server is running on port ${PORT || 3000}`);
     });
 })
 .catch((err) => {
