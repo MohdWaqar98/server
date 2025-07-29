@@ -51,26 +51,30 @@ userSchema.methods.isPasswordCorrect = async function (password){
 }
 
 userSchema.methods.generateAccessToken = function(){
+    if (!process.env.ACCESS_TOKEN_SECRET) {
+        throw new Error("ACCESS_TOKEN_SECRET is not defined");
+    }
     return jwt.sign(
         {
             _id: this._id,
             email: this.email,
-            // username: this.username,
             fullname: this.fullname
         },
-        process.env.ACCESS_TOKEN_SECRET || "humotion_secret_key_2024",
+        process.env.ACCESS_TOKEN_SECRET,
         {
             expiresIn: "1d"
         }
     )
 }
 userSchema.methods.generateRefreshToken = function(){
+    if (!process.env.REFRESH_TOKEN_SECRET) {
+        throw new Error("REFRESH_TOKEN_SECRET is not defined");
+    }
     return jwt.sign(
         {
             _id: this._id,
-            
         },
-        process.env.REFRESH_TOKEN_SECRET || "humotion_secret_key_2024",
+        process.env.REFRESH_TOKEN_SECRET,
         {
             expiresIn: "7d"
         }
