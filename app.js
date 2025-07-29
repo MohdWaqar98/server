@@ -15,6 +15,7 @@ const app = express();
 const allowedOrigins = [
     'http://localhost:8080', 
     'http://localhost:3000',
+    'https://server-six-omega-20.vercel.app',
     'https://your-frontend-domain.vercel.app', // Add your frontend domain
     'https://your-frontend-domain.netlify.app'  // Add your frontend domain
 ];
@@ -27,6 +28,7 @@ app.use(cors({
         if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
+            console.log('CORS blocked origin:', origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
@@ -45,6 +47,23 @@ app.get('/api/v1/deployment-status', (req, res) => {
     return res.status(200).json({
         success: true,
         message: "Deployment successful"
+    });
+});
+
+app.get('/test', (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: "Server is working!",
+        environment: process.env.NODE_ENV || 'development',
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/health', (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: "Server is running",
+        timestamp: new Date().toISOString()
     });
 });
 
@@ -88,5 +107,13 @@ dbConnect().then(()=>{
 })
 .catch((err) => {
     console.error("Failed to connect to the database:", err);
-    process.exit(1);
+    // Don't exit in production, let the server run without DB
+    if (process.env.NODE_ENV === 'production') {
+        console.log('Running without database connection in production');
+        const server = app.listen(PORT || 3000, () => {
+            console.log(`Server is running on port ${PORT || 3000} (without DB)`);
+        });
+    } else {
+        process.exit(1);
+    }
 });
