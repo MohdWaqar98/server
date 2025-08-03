@@ -16,8 +16,8 @@ const allowedOrigins = [
     'http://localhost:8080', 
     'http://localhost:3000',
     'https://server-six-omega-20.vercel.app',
-    'https://your-frontend-domain.vercel.app', // Add your frontend domain
-    'https://your-frontend-domain.netlify.app'  // Add your frontend domain
+    'https://www.humotionai.com', // Add your frontend domain
+    'https://humotion-frontend.vercel.app'  // Add your frontend domain
 ];
 
 app.use(cors({
